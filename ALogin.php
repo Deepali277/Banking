@@ -1,0 +1,64 @@
+<?php require 'autoloader.php'; ?>
+  <?php require 'function.php'; ?>
+  <?php
+    $con = new mysqli('localhost','root','','mybank');
+	
+		$error = "";
+		if ($con)
+		{
+			$error = "";
+  			$user = $_POST['email'];
+		    $pass = $_POST['userpassword'];
+		   
+		    $result = $con->query("select * from login where email='$user' AND password='$pass' AND type='user'");
+		    if($result->num_rows>0)
+		    { 
+		      session_start();
+		      $data = $result->fetch_assoc();
+		      $_SESSION['userId']=$data['id'];
+		      //$_SESSION['user'] = $data;
+		      header('location:accounts.php');
+		     }
+		    else
+		    {
+		      $error = "<div class='alert alert-warning text-center rounded-0'>Username or password wrong try again!</div>";
+		    }
+		}
+    ?>
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Login </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="login.css">
+
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="inner-warpper text-center">
+    <h1 class="title"> Login </h1>
+    <form action="ALogin.php" id="formvalidate">
+      <div class="input-group">
+        <label class="palceholder" for="email">User Email</label>
+        <input class="form-control" name="email" id="email" type="email" placeholder="" />
+        <span class="lighting"></span>
+      </div>
+      <div class="input-group">
+        <label class="palceholder" for="userPassword">Password</label>
+        <input class="form-control" name="userPassword" id="userPassword" type="password" placeholder="" />
+        <span class="lighting"></span>
+      </div>
+
+      <button type="submit" id="login">Login</button>
+    </form>
+  </div>
+</div>
+
+
+  <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js'></script><script  src="login.js"></script>
+
+</body>
+</html>
